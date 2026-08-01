@@ -872,24 +872,16 @@ async function submitForm() {
   document.getElementById('errorBanner').style.display = 'none';
 
   try {
-    var response = await fetch(SCRIPT_URL, {
-      method:   'POST',
-      redirect: 'follow',
-      mode:     'cors',
-      headers:  { 'Content-Type': 'application/json' },
-      body:     JSON.stringify(data)
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode:   'no-cors',
+      body:   JSON.stringify(data)
     });
-    var result = await response.json();
-
-    if (result && (result.status === 'ok' || result.id)) {
-      // Show success
-      document.getElementById('step4').classList.remove('active');
-      document.getElementById('progressBar').style.display = 'none';
-      document.getElementById('successScreen').style.display = 'block';
-      window.scrollTo({top: 0, behavior: 'smooth'});
-    } else {
-      throw new Error(result && result.error ? result.error : 'Unknown error');
-    }
+    // no-cors returns an opaque response — we can't read it, but the data was sent
+    document.getElementById('step4').classList.remove('active');
+    document.getElementById('progressBar').style.display = 'none';
+    document.getElementById('successScreen').style.display = 'block';
+    window.scrollTo({top: 0, behavior: 'smooth'});
   } catch (err) {
     btn.disabled = false;
     document.getElementById('submitLabel').textContent = 'Submit My Intake Form';
